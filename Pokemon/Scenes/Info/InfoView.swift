@@ -24,6 +24,7 @@ struct InfoView: View {
                 ZStack(alignment: .top) {
                     (colors?.backgroundColor ?? .gray)
                         .opacity(0.2)
+                        .ignoresSafeArea()
 
                     ScrollView {
                         VStack(spacing: 16) {
@@ -56,6 +57,10 @@ struct InfoView: View {
             } else if let error = viewModel.errorMessage {
                 Text("An error occured: \(error)")
                     .foregroundStyle(.red)
+
+                Button("Reload") {
+                    Task { await viewModel.fetchDetails() }
+                }
             } else {
                 EmptyView()
             }
