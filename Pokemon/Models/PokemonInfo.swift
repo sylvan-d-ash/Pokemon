@@ -8,8 +8,8 @@
 import Foundation
 
 struct PokemonInfo: Decodable {
-    struct Stats: Decodable {
-        struct Stat: Decodable {
+    struct Stats: Decodable, Hashable {
+        struct Stat: Decodable, Hashable {
             let name: String
         }
 
@@ -24,17 +24,21 @@ struct PokemonInfo: Decodable {
         }
     }
 
-    struct PokemonTypes: Decodable {
-        struct PokemonType: Decodable {
+    struct PokemonTypes: Decodable, Hashable {
+        struct PokemonType: Decodable, Hashable {
             let name: String
         }
 
-        let base: PokemonType
+        let type: PokemonType
 
-        var type: String { base.name }
+        var name: String { type.name }
+    }
+
+    struct Sprites: Decodable {
+        let front: String
 
         private enum CodingKeys: String, CodingKey {
-            case base = "type"
+            case front = "front_default"
         }
     }
 
@@ -44,6 +48,15 @@ struct PokemonInfo: Decodable {
     let height: Int
     let stats: [Stats]
     let types: [PokemonTypes]
+    let sprites: Sprites
+
+    var imageURL: URL? {
+        // NOTE: this leads to a very pixalated image
+        //return URL(string: sprites.front)
+
+        // use the official art work instead
+        URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
+    }
 }
 
 extension PokemonInfo {
@@ -62,8 +75,9 @@ extension PokemonInfo {
                 .init(base: 45, stat: .init(name: "speed")),
             ],
             types: [
-                .init(base: .init(name: "grass"))
-            ]
+                .init(type: .init(name: "grass"))
+            ],
+            sprites: .init(front: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
         )
     }
 }

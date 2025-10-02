@@ -14,6 +14,8 @@ extension InfoView {
         @Published private(set) var isLoading = false
         @Published private(set) var errorMessage: String?
 
+        var title: String { "#\(item.id)" }
+
         private let item: PokemonListItem
         private let service: PokemonInfoService
 

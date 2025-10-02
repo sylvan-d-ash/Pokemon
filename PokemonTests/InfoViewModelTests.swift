@@ -38,7 +38,7 @@ struct InfoViewModelTests {
         #expect(sut.pokemon?.name == "bulbasaur")
         #expect(sut.pokemon?.stats.first?.name == "hp")
         #expect(sut.pokemon?.stats.first?.base == 45)
-        #expect(sut.pokemon?.types.first?.type == "grass")
+        #expect(sut.pokemon?.types.first?.name == "grass")
     }
 
     @Test("fetch details failure")
