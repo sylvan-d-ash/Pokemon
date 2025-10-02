@@ -5,16 +5,16 @@
 //  Created by Sylvan  on 02/10/2025.
 //
 
-import Foundation
+import SwiftUI
 
 struct PokemonInfo: Decodable {
     struct Stats: Decodable, Hashable {
-        struct Stat: Decodable, Hashable {
+        struct Name: Decodable, Hashable {
             let name: String
         }
 
         let base: Int
-        let stat: Stat
+        let stat: Name
 
         var name: String { stat.name }
 
@@ -25,13 +25,18 @@ struct PokemonInfo: Decodable {
     }
 
     struct PokemonTypes: Decodable, Hashable {
-        struct PokemonType: Decodable, Hashable {
+        struct Name: Decodable, Hashable {
             let name: String
         }
 
-        let type: PokemonType
+        let type: Name
 
         var name: String { type.name }
+
+        var color: Color {
+            let type = PokemonType(rawValue: name)
+            return type?.color ?? .gray
+        }
     }
 
     struct Sprites: Decodable {

@@ -24,9 +24,14 @@ struct HomeView: View {
             ScrollView {
                 if viewModel.isLoading {
                     ProgressView("Loading...")
-                } else if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
+                } else if viewModel.errorMessage != nil && viewModel.pokemons.isEmpty {
+                    Text(viewModel.errorMessage!)
                         .foregroundStyle(.red)
+
+                    Button("Reload") {
+                        Task { await viewModel.fetchPokemons() }
+                    }
+                    .buttonStyle(.borderedProminent)
                 } else {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(viewModel.pokemons) { pokemon in

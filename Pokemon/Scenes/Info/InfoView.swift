@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import UIImageColors
 
 struct InfoView: View {
     @StateObject private var viewModel: ViewModel
-    @State private var bgColor: Color = .gray
+    @State private var colors: UIImageColors?
 
     init(pokemon: PokemonListItem) {
         _viewModel = .init(wrappedValue: .init(pokemon: pokemon))
@@ -21,21 +22,13 @@ struct InfoView: View {
                 ProgressView("Loading...")
             } else if let pokemon = viewModel.pokemon {
                 ZStack(alignment: .top) {
-                    bgColor
+                    backgroundColorView
                         .opacity(0.2)
+                        .ignoresSafeArea()
 
                     ScrollView {
                         VStack(spacing: 16) {
-                            AsyncImage(url: pokemon.imageURL) { phase in
-                                if let image = phase.image {
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 200)
-                                } else {
-                                    ProgressView()
-                                }
-                            }
+                            PokemonImageView(url: pokemon.imageURL, height: 200, colors: $colors)
 
                             Text("\(pokemon.name.capitalized)")
                                 .font(.title)
@@ -64,6 +57,11 @@ struct InfoView: View {
             } else if let error = viewModel.errorMessage {
                 Text("An error occured: \(error)")
                     .foregroundStyle(.red)
+
+                Button("Reload") {
+                    Task { await viewModel.fetchDetails() }
+                }
+                .buttonStyle(.borderedProminent)
             } else {
                 EmptyView()
             }
@@ -73,14 +71,34 @@ struct InfoView: View {
         .task { await viewModel.fetchDetails() }
     }
 
+    @ViewBuilder
+    private var backgroundColorView: some View {
+        if let colors {
+            LinearGradient(
+                gradient: Gradient(
+                    colors: [
+                        colors.backgroundColor,
+                        colors.primaryColor,
+                        colors.secondaryColor,
+                    ]
+                ),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        } else {
+            Color.gray
+        }
+    }
+
     private func typesView(_ pokemon: PokemonInfo) -> some View {
         HStack {
             ForEach(pokemon.types, id: \.self) { type in
                 Text(type.name.uppercased())
-                    .font(.headline)
+                    .font(.subheadline)
                     .foregroundStyle(.white)
-                    .padding(8)
-                    .background(.blue.opacity(0.2))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 10)
+                    .background(type.color.opacity(0.2))
                     .clipShape(.capsule)
             }
         }
