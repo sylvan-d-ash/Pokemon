@@ -6,11 +6,37 @@
 //
 
 import Testing
+@testable import Pokemon
 
+@MainActor
 struct PokemonTests {
+    var sut: HomeView.ViewModel!
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    init() {
+        sut = .init()
     }
 
+    @Test("initial state is empty")
+    func testInitialStateIsEmpty() {
+        #expect(sut.pokemons.isEmpty)
+        #expect(sut.isLoading == false)
+        #expect(sut.errorMessage == nil)
+    }
+
+    @Test("fetch pokemons successfully")
+    func testFetchPokemonsSuccessfully() async {
+        await sut.fetchPokemons()
+
+        #expect(sut.errorMessage == nil)
+        #expect(sut.pokemons.isEmpty == false)
+        #expect(sut.pokemons.first?.name == "Bulbasaur")
+    }
+
+    @Test("fetch pokemons failure")
+    func testFetchPokemonsFailure() async {
+        await sut.fetchPokemons()
+
+        #expect(sut.errorMessage != nil)
+        #expect(sut.pokemons.isEmpty)
+    }
 }
