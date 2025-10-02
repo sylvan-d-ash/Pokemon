@@ -11,26 +11,19 @@ import Testing
 @MainActor
 struct PokemonTests {
     var sut: HomeView.ViewModel!
-    var service: MockPokemonListService!
+    var service: MockPokemonRepository!
 
     init() {
         service = .init()
         sut = .init(service: service)
     }
 
-    @Test("initial state is empty")
-    func testInitialStateIsEmpty() {
-        #expect(sut.pokemons.isEmpty)
-        #expect(sut.isLoading == false)
-        #expect(sut.errorMessage == nil)
-    }
-
     @Test("fetch pokemons successfully")
-    func testFetchPokemonsSuccessfully() async {
-        service.mockPokemons = PokemonListItem.listExample
+    func testFetchPokemonsSuccessfully() {
+        service.mockList = PokemonListItem.listExample
         let count = PokemonListItem.listExample.count
 
-        await sut.fetchPokemons()
+        sut.loadPokemons()
 
         #expect(sut.errorMessage == nil)
         #expect(sut.pokemons.count == count)
@@ -38,12 +31,37 @@ struct PokemonTests {
     }
 
     @Test("fetch pokemons failure")
-    func testFetchPokemonsFailure() async {
+    func testFetchPokemonsFailure() {
         service.shouldFail = true
 
-        await sut.fetchPokemons()
+        sut.loadPokemons()
 
         #expect(sut.errorMessage == "Dummy error")
+        #expect(sut.pokemons.isEmpty)
+    }
+
+    @Test("search by name or id")
+    func testSearchByName() {
+        let mocks = PokemonListItem.listExample
+        let count = mocks.count
+        service.mockList = mocks
+
+        sut.loadPokemons()
+
+        #expect(sut.pokemons.count == count)
+
+        sut.searchText = "pik"
+        #expect(sut.pokemons.count == 1)
+        #expect(sut.pokemons.first?.id == 25)
+
+        sut.searchText = "2"
+        #expect(sut.pokemons.count == 2)
+        #expect(sut.pokemons.first?.id == 2)
+
+        sut.searchText = ""
+        #expect(sut.pokemons.count == count)
+
+        sut.searchText = "random"
         #expect(sut.pokemons.isEmpty)
     }
 }
