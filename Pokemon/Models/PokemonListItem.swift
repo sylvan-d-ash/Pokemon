@@ -29,3 +29,20 @@ struct PokemonListItem: Decodable {
         URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
     }
 }
+
+extension PokemonListItem {
+    static var example: PokemonListItem {
+        .init(name: "Bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/")
+    }
+
+    static var listExample: [PokemonListItem] {
+        [
+            .init(name: "Bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/"),
+            .init(name: "Charmander", url: "https://pokeapi.co/api/v2/pokemon/2/"),
+            .init(name: "Squirtle", url: "https://pokeapi.co/api/v2/pokemon/3/"),
+            .init(name: "Pikachu", url: "https://pokeapi.co/api/v2/pokemon/25/"),
+            .init(name: "Jigglypuff", url: "https://pokeapi.co/api/v2/pokemon/115/"),
+            .init(name: "Wartortle", url: "https://pokeapi.co/api/v2/pokemon/9/"),
+        ]
+    }
+}
