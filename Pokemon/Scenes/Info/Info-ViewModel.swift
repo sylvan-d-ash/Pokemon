@@ -29,7 +29,7 @@ extension InfoView {
             isLoading = true
             errorMessage = nil
 
-            let result = await service.fetchPokemonInfo(id: item.id)
+            let result = await service.fetchPokemonInfo(id: "\(item.id)")
             switch result {
             case .success(let pokemon):
                 self.pokemon = pokemon

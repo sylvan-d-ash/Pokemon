@@ -20,15 +20,24 @@ extension HomeView {
             self.service = service
         }
 
-        func fetchPokemons() async {
+        func fetchPokemons() {
+            pokemons = []
+            Task { await fetch(isInitial: true) }
+        }
+
+        func loadMorePokemons() {
+            Task { await fetch(isInitial: false) }
+        }
+
+        private func fetch(isInitial: Bool) async {
             guard !isLoading else { return }
             isLoading = true
             errorMessage = nil
 
-            let result = await service.fetchPokemons()
+            let result = await service.fetchPokemons(reset: isInitial)
             switch result {
             case .success(let pokemons):
-                self.pokemons = pokemons
+                self.pokemons.append(contentsOf: pokemons)
             case .failure(let error):
                 errorMessage = error.localizedDescription
             }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel: ViewModel
+    @State private var search: String = ""
 
     private let columns = [
         GridItem(.flexible()),
@@ -22,14 +23,14 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                if viewModel.isLoading {
+                if viewModel.isLoading && viewModel.pokemons.isEmpty {
                     ProgressView("Loading...")
                 } else if viewModel.errorMessage != nil && viewModel.pokemons.isEmpty {
                     Text(viewModel.errorMessage!)
                         .foregroundStyle(.red)
 
                     Button("Reload") {
-                        Task { await viewModel.fetchPokemons() }
+                        viewModel.fetchPokemons()
                     }
                     .buttonStyle(.borderedProminent)
                 } else {
@@ -37,6 +38,12 @@ struct HomeView: View {
                         ForEach(viewModel.pokemons) { pokemon in
                             NavigationLink(value: pokemon) {
                                 PokemonCardView(pokemon: pokemon)
+                            }
+                            .onAppear {
+                                // Load next batch when last item appears
+                                if pokemon == viewModel.pokemons.last {
+                                    viewModel.loadMorePokemons()
+                                }
                             }
                         }
                     }
@@ -47,7 +54,9 @@ struct HomeView: View {
             .navigationDestination(for: PokemonListItem.self) { pokemon in
                 InfoView(pokemon: pokemon)
             }
-            .task { await viewModel.fetchPokemons() }
+            .searchable(text: $search, prompt: "Search name or number")
+            .onAppear { viewModel.fetchPokemons() }
+            .refreshable { viewModel.fetchPokemons() }
         }
     }
 }
