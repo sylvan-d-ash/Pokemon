@@ -7,10 +7,8 @@
 
 import SwiftUI
 
-struct PokemonRow: View {
-    let id: String
-    let name: String
-    let imageURL: URL?
+struct PokemonCardView: View {
+    let pokemon: PokemonListItem
     @State private var bgColor: Color = .gray
 
     var body: some View {
@@ -19,7 +17,7 @@ struct PokemonRow: View {
                 .opacity(0.2)
 
             VStack {
-                AsyncImage(url: imageURL) { phase in
+                AsyncImage(url: pokemon.imageUrl) { phase in
                     switch phase {
                     case .success(let image):
                         image
@@ -30,7 +28,7 @@ struct PokemonRow: View {
                     }
                 }
 
-                Text("#\(id) \(name)")
+                Text("#\(pokemon.id) \(pokemon.name)")
                     .font(.headline)
                     .foregroundStyle(.black)
                     .padding(8)
@@ -60,16 +58,17 @@ struct HomeView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(viewModel.pokemons) { pokemon in
-                        PokemonRow(
-                            id: pokemon.id,
-                            name: pokemon.name,
-                            imageURL: pokemon.imageUrl
-                        )
+                        NavigationLink(value: pokemon) {
+                            PokemonCardView(pokemon: pokemon)
+                        }
                     }
                 }
                 .padding()
             }
             .navigationTitle("Pokemons")
+            .navigationDestination(for: PokemonListItem.self) { pokemon in
+                InfoView(pokemon: pokemon)
+            }
             .task { await viewModel.fetchPokemons() }
         }
     }
