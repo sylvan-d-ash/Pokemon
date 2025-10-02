@@ -21,7 +21,7 @@ enum PokemonListEndpoint: APIEndpoint {
 }
 
 protocol PokemonListService {
-    func fetchPokemons() async -> Result<[PokemonListItem], Error>
+    func fetchPokemons(reset: Bool) async -> Result<[PokemonListItem], Error>
 }
 
 final class DefaultPokemonListService: PokemonListService {
@@ -34,7 +34,11 @@ final class DefaultPokemonListService: PokemonListService {
         self.networkService = networkService
     }
 
-    func fetchPokemons() async -> Result<[PokemonListItem], Error> {
+    func fetchPokemons(reset: Bool = false) async -> Result<[PokemonListItem], Error> {
+        if reset {
+            offset = 0
+        }
+
         let endpoint = PokemonListEndpoint.list(count: limit, offset: offset)
         let results = await networkService.fetch(PokemonListResponse.self, endpoint: endpoint)
 
@@ -48,7 +52,5 @@ final class DefaultPokemonListService: PokemonListService {
         case .failure(let error):
             return .failure(error)
         }
-//        try? await Task.sleep(for: .seconds(2))
-//        return .success(PokemonListItem.listExample)
     }
 }

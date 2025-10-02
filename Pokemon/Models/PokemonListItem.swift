@@ -15,15 +15,16 @@ struct PokemonListResponse: Decodable {
 
 struct PokemonListItem: Decodable, Identifiable, Hashable {
     let name: String
-    let url: String
+    let id: Int
 
-    var id: String {
-        guard let id = url.split(separator: "/").last else {
-            return UUID().uuidString
-        }
-
-        return String(id)
-    }
+//    let url: String
+//    var apiID: String {
+//        guard let id = url.split(separator: "/").last else {
+//            return UUID().uuidString
+//        }
+//
+//        return String(id)
+//    }
 
     var imageUrl: URL? {
         URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
@@ -32,17 +33,15 @@ struct PokemonListItem: Decodable, Identifiable, Hashable {
 
 extension PokemonListItem {
     static var example: PokemonListItem {
-        .init(name: "Bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/")
+        .init(name: "Bulbasaur", id: 1)
     }
 
     static var listExample: [PokemonListItem] {
         [
-            .init(name: "Bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/"),
-            .init(name: "Charmander", url: "https://pokeapi.co/api/v2/pokemon/2/"),
-            .init(name: "Squirtle", url: "https://pokeapi.co/api/v2/pokemon/3/"),
-            .init(name: "Pikachu", url: "https://pokeapi.co/api/v2/pokemon/25/"),
-            .init(name: "Jigglypuff", url: "https://pokeapi.co/api/v2/pokemon/115/"),
-            .init(name: "Wartortle", url: "https://pokeapi.co/api/v2/pokemon/9/"),
+            .init(name: "Bulbasaur", id: 1),
+            .init(name: "Charmander", id: 2),
+            .init(name: "Squirtle", id: 3),
+            .init(name: "Pikachu", id: 25),
         ]
     }
 }

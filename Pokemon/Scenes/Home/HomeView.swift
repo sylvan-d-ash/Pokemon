@@ -22,16 +22,11 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                if viewModel.isLoading {
+                if viewModel.isLoading && viewModel.pokemons.isEmpty {
                     ProgressView("Loading...")
                 } else if viewModel.errorMessage != nil && viewModel.pokemons.isEmpty {
                     Text(viewModel.errorMessage!)
                         .foregroundStyle(.red)
-
-                    Button("Reload") {
-                        Task { await viewModel.fetchPokemons() }
-                    }
-                    .buttonStyle(.borderedProminent)
                 } else {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(viewModel.pokemons) { pokemon in
@@ -47,7 +42,8 @@ struct HomeView: View {
             .navigationDestination(for: PokemonListItem.self) { pokemon in
                 InfoView(pokemon: pokemon)
             }
-            .task { await viewModel.fetchPokemons() }
+            .searchable(text: $viewModel.searchText, prompt: "Search name or number")
+            .onAppear { viewModel.loadPokemons() }
         }
     }
 }

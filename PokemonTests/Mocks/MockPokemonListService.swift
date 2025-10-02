@@ -12,7 +12,7 @@ final class MockPokemonListService: PokemonListService {
     var mockPokemons: [PokemonListItem] = []
     var shouldFail = false
 
-    func fetchPokemons() async -> Result<[PokemonListItem], Error> {
+    func fetchPokemons(reset: Bool = false) async -> Result<[PokemonListItem], Error> {
         if shouldFail {
             return .failure(MockTestError.dummyError)
         }
