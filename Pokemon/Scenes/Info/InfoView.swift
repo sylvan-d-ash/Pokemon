@@ -94,10 +94,11 @@ struct InfoView: View {
         HStack {
             ForEach(pokemon.types, id: \.self) { type in
                 Text(type.name.uppercased())
-                    .font(.headline)
+                    .font(.subheadline)
                     .foregroundStyle(.white)
-                    .padding(8)
-                    .background(.blue.opacity(0.2))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 10)
+                    .background(type.color.opacity(0.2))
                     .clipShape(.capsule)
             }
         }
