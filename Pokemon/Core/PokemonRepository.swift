@@ -10,11 +10,13 @@ import Foundation
 enum RepositoryError: Error, LocalizedError {
     case fileNotFound
     case decodingFailed
+    case failedToReadFile
 
     var errorDescription: String? {
         switch self {
         case .fileNotFound: return "Pokemon file not found"
         case .decodingFailed: return "Decoding failed"
+        case .failedToReadFile: return "Failed to read file"
         }
     }
 }
@@ -34,8 +36,10 @@ final class DefaultPokemonRepository: PokemonRepository {
             let decoder = JSONDecoder()
             let results = try decoder.decode([PokemonListItem].self, from: data)
             return .success(results)
-        } catch {
+        } catch _ as DecodingError {
             return .failure(RepositoryError.decodingFailed)
+        } catch {
+            return .failure(RepositoryError.failedToReadFile)
         }
     }
 }

@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct PokemonInfo: Decodable {
-    struct Stats: Decodable, Hashable {
-        struct Name: Decodable, Hashable {
+struct PokemonInfo: Codable {
+    struct Stats: Codable, Hashable {
+        struct Name: Codable, Hashable {
             let name: String
         }
 
@@ -24,8 +24,8 @@ struct PokemonInfo: Decodable {
         }
     }
 
-    struct PokemonTypes: Decodable, Hashable {
-        struct Name: Decodable, Hashable {
+    struct PokemonTypes: Codable, Hashable {
+        struct Name: Codable, Hashable {
             let name: String
         }
 
@@ -39,7 +39,7 @@ struct PokemonInfo: Decodable {
         }
     }
 
-    struct Sprites: Decodable {
+    struct Sprites: Codable {
         let front: String
 
         private enum CodingKeys: String, CodingKey {
