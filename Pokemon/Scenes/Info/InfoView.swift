@@ -26,16 +26,7 @@ struct InfoView: View {
 
                     ScrollView {
                         VStack(spacing: 16) {
-                            AsyncImage(url: pokemon.imageURL) { phase in
-                                if let image = phase.image {
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 200)
-                                } else {
-                                    ProgressView()
-                                }
-                            }
+                            PokemonImageView(url: pokemon.imageURL, height: 200)
 
                             Text("\(pokemon.name.capitalized)")
                                 .font(.title)

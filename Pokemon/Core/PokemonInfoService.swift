@@ -33,5 +33,7 @@ final class DefaultPokemonInfoService: PokemonInfoService {
     func fetchPokemonInfo(id: String) async -> Result<PokemonInfo, Error> {
         let endpoint = PokemonInfoEndpoint.pokemon(id: id)
         return await networkService.fetch(PokemonInfo.self, endpoint: endpoint)
+//        try? await Task.sleep(for: .seconds(2))
+//        return .success(PokemonInfo.example)
     }
 }

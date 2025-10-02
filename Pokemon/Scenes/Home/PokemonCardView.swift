@@ -18,16 +18,7 @@ extension HomeView {
                     .opacity(0.2)
 
                 VStack {
-                    AsyncImage(url: pokemon.imageUrl) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        default:
-                            ProgressView()
-                        }
-                    }
+                    PokemonImageView(url: pokemon.imageUrl)
 
                     Text("#\(pokemon.id) \(pokemon.name)")
                         .font(.headline)

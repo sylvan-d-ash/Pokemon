@@ -48,5 +48,7 @@ final class DefaultPokemonListService: PokemonListService {
         case .failure(let error):
             return .failure(error)
         }
+//        try? await Task.sleep(for: .seconds(2))
+//        return .success(PokemonListItem.listExample)
     }
 }
