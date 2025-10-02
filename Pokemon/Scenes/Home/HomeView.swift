@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel: ViewModel
-    @State private var search: String = ""
 
     private let columns = [
         GridItem(.flexible()),
@@ -28,22 +27,11 @@ struct HomeView: View {
                 } else if viewModel.errorMessage != nil && viewModel.pokemons.isEmpty {
                     Text(viewModel.errorMessage!)
                         .foregroundStyle(.red)
-
-                    Button("Reload") {
-                        viewModel.fetchPokemons()
-                    }
-                    .buttonStyle(.borderedProminent)
                 } else {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(viewModel.pokemons) { pokemon in
                             NavigationLink(value: pokemon) {
                                 PokemonCardView(pokemon: pokemon)
-                            }
-                            .onAppear {
-                                // Load next batch when last item appears
-                                if pokemon == viewModel.pokemons.last {
-                                    viewModel.loadMorePokemons()
-                                }
                             }
                         }
                     }
@@ -54,9 +42,8 @@ struct HomeView: View {
             .navigationDestination(for: PokemonListItem.self) { pokemon in
                 InfoView(pokemon: pokemon)
             }
-            .searchable(text: $search, prompt: "Search name or number")
-            .onAppear { viewModel.fetchPokemons() }
-            .refreshable { viewModel.fetchPokemons() }
+            .searchable(text: $viewModel.searchText, prompt: "Search name or number")
+            .onAppear { viewModel.loadPokemons() }
         }
     }
 }

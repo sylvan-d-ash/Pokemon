@@ -25,36 +25,16 @@ protocol PokemonListService {
 }
 
 final class DefaultPokemonListService: PokemonListService {
-    private let repository: PokemonRepository
     private let networkService: NetworkService
     private var count = 0
     private var offset = 0
     private let limit = 10
 
-    init(
-        networkService: NetworkService = URLSessionNetworkService(),
-        repository: PokemonRepository = PokemonRepository.shared
-    ) {
+    init(networkService: NetworkService = URLSessionNetworkService()) {
         self.networkService = networkService
-        self.repository = repository
     }
 
     func fetchPokemons(reset: Bool = false) async -> Result<[PokemonListItem], Error> {
-        if reset {
-            offset = 0
-        }
-
-        let pokemons = repository.pokemons
-        guard offset < pokemons.count else {
-            return .success([])
-        }
-
-        let slice = Array(pokemons[offset..<min(offset + limit, pokemons.count)])
-        offset += limit
-        return .success(slice)
-    }
-
-    func fetchFromNetworkService(reset: Bool = false) async -> Result<[PokemonListItem], Error> {
         if reset {
             offset = 0
         }

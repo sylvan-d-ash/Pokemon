@@ -10,34 +10,36 @@ import Foundation
 extension HomeView {
     @MainActor
     final class ViewModel: ObservableObject {
-        @Published private(set) var pokemons: [PokemonListItem] = []
         @Published private(set) var isLoading = false
         @Published private(set) var errorMessage: String?
+        @Published var searchText: String = ""
 
-        private let service: PokemonListService
+        private let service: PokemonRepository
+        private var allPokemons: [PokemonListItem] = []
 
-        init(service: PokemonListService = DefaultPokemonListService()) {
+        var pokemons: [PokemonListItem] {
+            if searchText.isEmpty {
+                return allPokemons
+            }
+            return allPokemons.filter {
+                let text = searchText.lowercased().trimmingCharacters(in: .whitespaces)
+                return $0.name.lowercased().contains(text) || "\($0.id)".contains(text)
+            }
+        }
+
+        init(service: PokemonRepository = DefaultPokemonRepository()) {
             self.service = service
         }
 
-        func fetchPokemons() {
-            pokemons = []
-            Task { await fetch(isInitial: true) }
-        }
-
-        func loadMorePokemons() {
-            Task { await fetch(isInitial: false) }
-        }
-
-        private func fetch(isInitial: Bool) async {
+        func loadPokemons() {
             guard !isLoading else { return }
             isLoading = true
             errorMessage = nil
 
-            let result = await service.fetchPokemons(reset: isInitial)
+            let result = service.loadPokemonData()
             switch result {
             case .success(let pokemons):
-                self.pokemons.append(contentsOf: pokemons)
+                allPokemons = pokemons
             case .failure(let error):
                 errorMessage = error.localizedDescription
             }

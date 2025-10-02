@@ -7,21 +7,35 @@
 
 import Foundation
 
-class PokemonRepository {
-    static let shared = PokemonRepository()
-    private(set) var pokemons: [PokemonListItem] = []
+enum RepositoryError: Error, LocalizedError {
+    case fileNotFound
+    case decodingFailed
 
-    private init() {
-        loadPokemonData()
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound: return "Pokemon file not found"
+        case .decodingFailed: return "Decoding failed"
+        }
     }
+}
 
-    private func loadPokemonData() {
-        if let url = Bundle.main.url(forResource: "pokemons", withExtension: "json"),
-           let data = try? Data(contentsOf: url) {
+protocol PokemonRepository {
+    func loadPokemonData() -> Result<[PokemonListItem], Error>
+}
+
+final class DefaultPokemonRepository: PokemonRepository {
+    func loadPokemonData() -> Result<[PokemonListItem], Error> {
+        guard let url = Bundle.main.url(forResource: "pokemons", withExtension: "json") else {
+            return .failure(RepositoryError.fileNotFound)
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
-            if let loaded = try? decoder.decode([PokemonListItem].self, from: data) {
-                self.pokemons = loaded
-            }
+            let results = try decoder.decode([PokemonListItem].self, from: data)
+            return .success(results)
+        } catch {
+            return .failure(RepositoryError.decodingFailed)
         }
     }
 }
