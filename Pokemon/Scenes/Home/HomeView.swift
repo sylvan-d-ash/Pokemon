@@ -56,14 +56,21 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(viewModel.pokemons) { pokemon in
-                        NavigationLink(value: pokemon) {
-                            PokemonCardView(pokemon: pokemon)
+                if viewModel.isLoading {
+                    ProgressView("Loading...")
+                } else if let errorMessage = viewModel.errorMessage {
+                    Text(errorMessage)
+                        .foregroundStyle(.red)
+                } else {
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(viewModel.pokemons) { pokemon in
+                            NavigationLink(value: pokemon) {
+                                PokemonCardView(pokemon: pokemon)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("Pokemons")
             .navigationDestination(for: PokemonListItem.self) { pokemon in
