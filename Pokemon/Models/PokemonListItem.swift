@@ -13,7 +13,7 @@ struct PokemonListResponse: Decodable {
     let results: [PokemonListItem]
 }
 
-struct PokemonListItem: Decodable {
+struct PokemonListItem: Decodable, Identifiable {
     let name: String
     let url: String
 
