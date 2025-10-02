@@ -21,10 +21,18 @@ extension HomeView {
         }
 
         func fetchPokemons() async {
+            guard !isLoading else { return }
             isLoading = true
             errorMessage = nil
-            try? await Task.sleep(for: .seconds(2))
-            pokemons = PokemonListItem.listExample
+
+            let result = await service.fetchPokemons()
+            switch result {
+            case .success(let pokemons):
+                self.pokemons = pokemons
+            case .failure(let error):
+                errorMessage = error.localizedDescription
+            }
+
             isLoading = false
         }
     }
