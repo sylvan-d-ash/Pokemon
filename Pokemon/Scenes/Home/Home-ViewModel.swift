@@ -14,6 +14,12 @@ extension HomeView {
         @Published private(set) var isLoading = false
         @Published private(set) var errorMessage: String?
 
+        private let service: PokemonListService
+
+        init(service: PokemonListService = DefaultPokemonListService()) {
+            self.service = service
+        }
+
         func fetchPokemons() async {
             isLoading = true
             errorMessage = nil
