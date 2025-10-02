@@ -16,7 +16,7 @@ struct InfoViewModelTests {
 
     init() {
         service = .init()
-        sut = .init(item: pokemon, service: service)
+        sut = .init(pokemon: pokemon, service: service)
     }
 
     @Test("initial state is empty")
@@ -37,7 +37,7 @@ struct InfoViewModelTests {
         #expect(sut.errorMessage == nil)
         #expect(sut.pokemon?.name == "bulbasaur")
         #expect(sut.pokemon?.stats.first?.name == "hp")
-        #expect(sut.pokemon?.stats.first?.name == "45")
+        #expect(sut.pokemon?.stats.first?.base == 45)
         #expect(sut.pokemon?.types.first?.type == "grass")
     }
 
