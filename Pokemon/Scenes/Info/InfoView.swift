@@ -69,6 +69,7 @@ struct InfoView: View {
             }
         }
         .navigationTitle(viewModel.title)
+        .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.fetchDetails() }
     }
 
@@ -92,7 +93,7 @@ struct InfoView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("\(pokemon.height)") // decimetres
+                Text("\(pokemon.heightInMeters, specifier: "%.2f") m (\(pokemon.heightInFeetAndInches) ft)")
             }
             .frame(maxWidth: .infinity)
 
@@ -103,7 +104,7 @@ struct InfoView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("\(pokemon.weight)") // hectograms
+                Text("\(pokemon.weightInKilograms, specifier: "%.1f") kg (\(pokemon.weightInPounds, specifier: "%.1f") lbs)")
             }
             .frame(maxWidth: .infinity)
         }

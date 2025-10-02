@@ -57,6 +57,26 @@ struct PokemonInfo: Decodable {
         // use the official art work instead
         URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
     }
+
+    var heightInMeters: Double {
+        Double(height) * 0.1
+    }
+
+    var heightInFeetAndInches: String {
+        let heightInFeet = heightInMeters * 3.28084
+        let totalInches = Int(round(heightInFeet * 12))
+        let feet = totalInches / 12
+        let inches = totalInches % 12
+        return "\(feet)′\(inches)″"
+    }
+
+    var weightInKilograms: Double {
+        Double(weight) * 0.1
+    }
+
+    var weightInPounds: Double {
+        weightInKilograms * 2.20462
+    }
 }
 
 extension PokemonInfo {
