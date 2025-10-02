@@ -22,7 +22,7 @@ struct InfoView: View {
                 ProgressView("Loading...")
             } else if let pokemon = viewModel.pokemon {
                 ZStack(alignment: .top) {
-                    (colors?.backgroundColor ?? .gray)
+                    backgroundColorView
                         .opacity(0.2)
                         .ignoresSafeArea()
 
@@ -61,6 +61,7 @@ struct InfoView: View {
                 Button("Reload") {
                     Task { await viewModel.fetchDetails() }
                 }
+                .buttonStyle(.borderedProminent)
             } else {
                 EmptyView()
             }
@@ -68,6 +69,25 @@ struct InfoView: View {
         .navigationTitle(viewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.fetchDetails() }
+    }
+
+    @ViewBuilder
+    private var backgroundColorView: some View {
+        if let colors {
+            LinearGradient(
+                gradient: Gradient(
+                    colors: [
+                        colors.backgroundColor,
+                        colors.primaryColor,
+                        colors.secondaryColor,
+                    ]
+                ),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        } else {
+            Color.gray
+        }
     }
 
     private func typesView(_ pokemon: PokemonInfo) -> some View {
