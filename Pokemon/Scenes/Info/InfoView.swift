@@ -134,6 +134,8 @@ struct InfoView: View {
                 HStack {
                     Text(stat.name.capitalized)
                         .frame(width: 90, alignment: .leading)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
 
                     Text("\(stat.base)")
                         .frame(width: 40)
@@ -141,7 +143,6 @@ struct InfoView: View {
                     ProgressView(value: Double(stat.base), total: 255)
                         .progressViewStyle(.linear)
                         .tint(.green)
-                        .frame(height: 5)
                 }
                 .font(.subheadline)
             }
