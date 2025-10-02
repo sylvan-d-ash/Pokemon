@@ -1,5 +1,5 @@
 //
-//  PokemonInfoViewModelTests.swift
+//  InfoViewModelTests.swift
 //  PokemonTests
 //
 //  Created by Sylvan  on 02/10/2025.
@@ -9,13 +9,14 @@ import Testing
 @testable import Pokemon
 
 @MainActor
-struct PokemonInfoViewModelTests {
-    var sut: PokemonInfoView.ViewModel!
-    var service: PokemonInfoService!
+struct InfoViewModelTests {
+    var sut: InfoView.ViewModel!
+    var service: MockPokemonInfoService!
+    let pokemon = PokemonListItem.example
 
     init() {
         service = .init()
-        sut = .init(service: service)
+        sut = .init(item: pokemon, service: service)
     }
 
     @Test("initial state is empty")
@@ -27,7 +28,7 @@ struct PokemonInfoViewModelTests {
 
     @Test("fetch details successfully")
     func fetchDetailsSuccessfully() async {
-        service.mockDetails = PokemonInfo.example
+        service.mockPokemon = PokemonInfo.example
 
         await sut.fetchDetails()
 
