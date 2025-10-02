@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import UIImageColors
 
 struct InfoView: View {
     @StateObject private var viewModel: ViewModel
-    @State private var bgColor: Color = .gray
+    @State private var colors: UIImageColors?
 
     init(pokemon: PokemonListItem) {
         _viewModel = .init(wrappedValue: .init(pokemon: pokemon))
@@ -21,12 +22,12 @@ struct InfoView: View {
                 ProgressView("Loading...")
             } else if let pokemon = viewModel.pokemon {
                 ZStack(alignment: .top) {
-                    bgColor
+                    (colors?.backgroundColor ?? .gray)
                         .opacity(0.2)
 
                     ScrollView {
                         VStack(spacing: 16) {
-                            PokemonImageView(url: pokemon.imageURL, height: 200)
+                            PokemonImageView(url: pokemon.imageURL, height: 200, colors: $colors)
 
                             Text("\(pokemon.name.capitalized)")
                                 .font(.title)

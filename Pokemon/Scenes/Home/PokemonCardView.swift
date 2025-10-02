@@ -6,21 +6,22 @@
 //
 
 import SwiftUI
+import UIImageColors
 
 extension HomeView {
     struct PokemonCardView: View {
         let pokemon: PokemonListItem
-        @State private var bgColor: Color = .gray
+        @State private var colors: UIImageColors?
 
         var body: some View {
             ZStack {
-                bgColor
+                (colors?.backgroundColor ?? .gray)
                     .opacity(0.2)
 
                 VStack {
-                    PokemonImageView(url: pokemon.imageUrl)
+                    PokemonImageView(url: pokemon.imageUrl, colors: $colors)
 
-                    Text("#\(pokemon.id) \(pokemon.name)")
+                    Text("#\(pokemon.id) \(pokemon.name.capitalized)")
                         .font(.headline)
                         .foregroundStyle(.black)
                         .padding(8)

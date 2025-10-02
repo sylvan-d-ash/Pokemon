@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import UIImageColors
 
 struct PokemonImageView: View {
     let url: URL?
     var height: CGFloat = 150
+    @Binding var colors: UIImageColors?
 
     var body: some View {
         AsyncImage(url: url) { phase in
@@ -24,6 +26,9 @@ struct PokemonImageView: View {
                     .scaledToFit()
                     .frame(height: height)
                     .frame(maxWidth: .infinity)
+                    .onAppear {
+                        extractColors(from: image)
+                    }
             case .failure:
                 Image(systemName: "xmark.octagon")
                     .resizable()
@@ -32,6 +37,16 @@ struct PokemonImageView: View {
                     .frame(maxWidth: .infinity)
             @unknown default:
                 EmptyView()
+            }
+        }
+    }
+
+    private func extractColors(from image: Image) {
+        let renderer = ImageRenderer(content: image)
+        renderer.scale = UIScreen.main.scale
+        renderer.uiImage?.getColors { result in
+            DispatchQueue.main.async {
+                self.colors = result
             }
         }
     }
