@@ -106,6 +106,8 @@ If the app were to grow, the next step would be to separate into modules such as
 
   * Since only one `InfoView` is shown at a time and `fetchPokemonInfo` is only called once per appearance, race conditions are not a concern. Using `actor`, `NSCache`, or GCD would be overkill here.
 
+Additionally, for offline caching, **FileManager** was chosen instead of CoreData or SwiftData. The reason for this decision was simplicity and lightness — FileManager provided a quick, easy-to-implement solution that avoided the extra setup and overhead of database frameworks, while still being sufficient for the caching needs of this project.
+
 ### Colors
 
 * `UIImageColors` extracts dominant colors from Pokémon images to set dynamic backgrounds. This mimics modern Pokédex-inspired UI designs seen on Dribbble/Pinterest, and static colors wouldn’t achieve the same effect.
