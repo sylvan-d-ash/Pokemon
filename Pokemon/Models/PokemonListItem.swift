@@ -17,15 +17,6 @@ struct PokemonListItem: Decodable, Identifiable, Hashable {
     let name: String
     let id: Int
 
-//    let url: String
-//    var apiID: String {
-//        guard let id = url.split(separator: "/").last else {
-//            return UUID().uuidString
-//        }
-//
-//        return String(id)
-//    }
-
     var imageUrl: URL? {
         URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
     }

@@ -40,6 +40,7 @@ final class DefaultPokemonInfoService: PokemonInfoService {
 
         let cachedResults = loadFromDisk(id: id)
         if case let .success(diskCache) = cachedResults {
+            cache[id] = diskCache
             return .success(diskCache)
         }
 
