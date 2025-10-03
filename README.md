@@ -27,6 +27,16 @@ It displays a list of all 1010 Pokémon (sourced from a bundled JSON for reliabi
 
 No additional setup or dependencies are required — everything runs out of the box.
 
+## Git Workflow
+
+For this project, I used a simple branching strategy suited for a small, single-developer app:  
+
+- Each feature was developed on its own branch (e.g. `homepage`, `info`, `network`, `caching`, `background-colors`, etc).  
+- Once a feature was complete, I opened a Pull Request (PR) and merged it directly into the `main` branch.  
+- This approach allowed for clean separation of features while keeping the workflow lightweight, without the overhead of managing long-lived branches.  
+
+Since this was a small project built under time constraints, this lightweight workflow provided both clarity and speed.
+
 ## 🏗️ Architecture & Structure
 
 ### High-Level Approach
