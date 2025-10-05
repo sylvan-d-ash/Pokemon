@@ -66,6 +66,7 @@ final class DefaultPokemonInfoService: PokemonInfoService {
         let endpoint = PokemonEndpoint.info(id: id)
         do {
             let pokemonInfo = try await networkService.request(endpoint: endpoint, responseType: PokemonInfo.self)
+            saveToDisk(pokemonInfo, for: id)
             return .success(pokemonInfo)
         } catch {
             return .failure(error)

@@ -16,8 +16,7 @@ let package = Package(
         ),
     ],
     targets: [
-        .target(
-            name: "PokemonModels"),
+        .target(name: "PokemonModels"),
         .testTarget(
             name: "PokemonModelsTests",
             dependencies: ["PokemonModels"]

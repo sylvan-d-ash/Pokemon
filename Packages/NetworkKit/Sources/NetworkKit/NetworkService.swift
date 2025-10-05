@@ -1,7 +1,7 @@
 import Foundation
 
 /// Generic network service protocol
-public protocol NetworkService {
+public protocol NetworkService: Sendable {
     /// Performs a network request and returns decoded data
     /// - Parameters:
     ///   - endpoint: The endpoint to request
