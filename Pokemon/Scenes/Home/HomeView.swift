@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PokemonModels
 
 struct HomeView: View {
     @StateObject private var viewModel: ViewModel

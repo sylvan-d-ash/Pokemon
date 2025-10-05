@@ -7,6 +7,7 @@
 
 import Foundation
 import NetworkKit
+import PokemonModels
 
 protocol PokemonListService {
     func fetchPokemons(reset: Bool) async -> Result<[PokemonListItem], Error>

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PokemonModels
 
 enum RepositoryError: Error, LocalizedError {
     case fileNotFound

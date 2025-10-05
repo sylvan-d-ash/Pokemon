@@ -7,6 +7,7 @@
 
 import Foundation
 import NetworkKit
+import PokemonModels
 
 enum PokemonEndpoint: Endpoint {
     case list(offset: Int, limit: Int)

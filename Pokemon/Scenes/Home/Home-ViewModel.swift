@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PokemonModels
 
 extension HomeView {
     @MainActor
