@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04F54D8C2E8EF03C0066F4FB /* UIImageColors in Frameworks */ = {isa = PBXBuildFile; productRef = 04F54D8B2E8EF03C0066F4FB /* UIImageColors */; };
+		04F54E0A2E92E80C0066F4FB /* NetworkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04F54E092E92E80C0066F4FB /* NetworkKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04F54E0A2E92E80C0066F4FB /* NetworkKit in Frameworks */,
 				04F54D8C2E8EF03C0066F4FB /* UIImageColors in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,6 +98,7 @@
 			name = Pokemon;
 			packageProductDependencies = (
 				04F54D8B2E8EF03C0066F4FB /* UIImageColors */,
+				04F54E092E92E80C0066F4FB /* NetworkKit */,
 			);
 			productName = Pokemon;
 			productReference = 04F54D302E8EB4640066F4FB /* Pokemon.app */;
@@ -154,6 +157,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				04F54D8A2E8EF03C0066F4FB /* XCRemoteSwiftPackageReference "UIImageColors" */,
+				04F54E082E92E80C0066F4FB /* XCLocalSwiftPackageReference "Packages/NetworkKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 04F54D312E8EB4640066F4FB /* Products */;
@@ -476,6 +480,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		04F54E082E92E80C0066F4FB /* XCLocalSwiftPackageReference "Packages/NetworkKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/NetworkKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		04F54D8A2E8EF03C0066F4FB /* XCRemoteSwiftPackageReference "UIImageColors" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -492,6 +503,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 04F54D8A2E8EF03C0066F4FB /* XCRemoteSwiftPackageReference "UIImageColors" */;
 			productName = UIImageColors;
+		};
+		04F54E092E92E80C0066F4FB /* NetworkKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NetworkKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

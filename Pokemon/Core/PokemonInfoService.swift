@@ -6,17 +6,33 @@
 //
 
 import Foundation
+import NetworkKit
 
-enum PokemonInfoEndpoint: APIEndpoint {
-    case pokemon(id: String)
+enum PokemonEndpoint: Endpoint {
+    case list(offset: Int, limit: Int)
+    case info(id: String)
+
+    var method: HTTPMethod { .get }
+    var headers: [String : String]? { nil }
+    var body: Data? { nil }
 
     var path: String {
         switch self {
-        case .pokemon(let id): return "/pokemon/\(id)"
+        case .list: "/pokemon"
+        case .info(let id): "/pokemon/\(id)"
         }
     }
 
-    var parameters: [String : Any]? { nil }
+    var queryItems: [URLQueryItem]? {
+        switch self {
+        case .list(let offset, let limit):
+            return [
+                URLQueryItem(name: "offset", value: "\(offset)"),
+                URLQueryItem(name: "limit", value: "\(limit)"),
+            ]
+        case .info: return nil
+        }
+    }
 }
 
 protocol PokemonInfoService {
@@ -29,7 +45,9 @@ final class DefaultPokemonInfoService: PokemonInfoService {
     // simple in-memory cache
     private var cache: [String: PokemonInfo] = [:]
 
-    init(networkService: NetworkService = URLSessionNetworkService()) {
+    init(
+        networkService: NetworkService = URLSessionNetworkService(baseURLString: "https://pokeapi.co/api/v2")
+    ) {
         self.networkService = networkService
     }
 
@@ -44,15 +62,11 @@ final class DefaultPokemonInfoService: PokemonInfoService {
             return .success(diskCache)
         }
 
-        let endpoint = PokemonInfoEndpoint.pokemon(id: id)
-        let results = await networkService.fetch(PokemonInfo.self, endpoint: endpoint)
-
-        switch results {
-        case .success(let info):
-            cache[id] = info
-            saveToDisk(info, for: id)
-            return .success(info)
-        case .failure(let error):
+        let endpoint = PokemonEndpoint.info(id: id)
+        do {
+            let pokemonInfo = try await networkService.request(endpoint: endpoint, responseType: PokemonInfo.self)
+            return .success(pokemonInfo)
+        } catch {
             return .failure(error)
         }
     }

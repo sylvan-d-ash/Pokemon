@@ -6,19 +6,7 @@
 //
 
 import Foundation
-
-enum PokemonListEndpoint: APIEndpoint {
-    case list(count: Int, offset: Int)
-
-    var path: String { "/pokemon" }
-
-    var parameters: [String : Any]? {
-        switch self {
-        case .list(let count, let offset):
-            return ["limit": count, "offset": offset]
-        }
-    }
-}
+import NetworkKit
 
 protocol PokemonListService {
     func fetchPokemons(reset: Bool) async -> Result<[PokemonListItem], Error>
@@ -30,7 +18,7 @@ final class DefaultPokemonListService: PokemonListService {
     private var offset = 0
     private let limit = 10
 
-    init(networkService: NetworkService = URLSessionNetworkService()) {
+    init(networkService: NetworkService) {
         self.networkService = networkService
     }
 
@@ -39,17 +27,11 @@ final class DefaultPokemonListService: PokemonListService {
             offset = 0
         }
 
-        let endpoint = PokemonListEndpoint.list(count: limit, offset: offset)
-        let results = await networkService.fetch(PokemonListResponse.self, endpoint: endpoint)
-
-        switch results {
-        case .success(let success):
-            count = success.count
-            if count > offset {
-                offset += limit
-            }
-            return .success(success.results)
-        case .failure(let error):
+        let endpoint = PokemonEndpoint.list(offset: offset, limit: limit)
+        do {
+            let pokemonList = try await networkService.request(endpoint: endpoint, responseType: PokemonListResponse.self)
+            return .success(pokemonList.results)
+        } catch {
             return .failure(error)
         }
     }
