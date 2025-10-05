@@ -12,14 +12,15 @@ public final class LocalPokemonRepository: PokemonRepository {
 
     public func fetchAllPokemons() async throws -> [PokemonListItem] {
         guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
+            print("File not found in bundle")
             throw NSError(
                 domain: "LocalPokemonRepository", code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "JSON file not found"])
         }
 
         let data = try Data(contentsOf: url)
-        let response = try JSONDecoder().decode(PokemonListResponse.self, from: data)
-        return response.results
+        let response = try JSONDecoder().decode([PokemonListItem].self, from: data)
+        return response
     }
 
     public func fetchPokemonDetail(id: Int) async throws -> PokemonInfo {

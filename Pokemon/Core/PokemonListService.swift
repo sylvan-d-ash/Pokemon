@@ -6,32 +6,24 @@
 //
 
 import Foundation
-import NetworkKit
+import PokemonRepositoryKit
 import PokemonModels
 
 protocol PokemonListService {
-    func fetchPokemons(reset: Bool) async -> Result<[PokemonListItem], Error>
+    func fetchPokemons() async -> Result<[PokemonListItem], Error>
 }
 
 final class DefaultPokemonListService: PokemonListService {
-    private let networkService: NetworkService
-    private var count = 0
-    private var offset = 0
-    private let limit = 10
+    private let repository: PokemonRepository
 
-    init(networkService: NetworkService) {
-        self.networkService = networkService
+    init(repository: PokemonRepository) {
+        self.repository = repository
     }
 
-    func fetchPokemons(reset: Bool = false) async -> Result<[PokemonListItem], Error> {
-        if reset {
-            offset = 0
-        }
-
-        let endpoint = PokemonEndpoint.list(offset: offset, limit: limit)
+    func fetchPokemons() async -> Result<[PokemonListItem], Error> {
         do {
-            let pokemonList = try await networkService.request(endpoint: endpoint, responseType: PokemonListResponse.self)
-            return .success(pokemonList.results)
+            let pokemonList = try await repository.fetchAllPokemons()
+            return .success(pokemonList)
         } catch {
             return .failure(error)
         }

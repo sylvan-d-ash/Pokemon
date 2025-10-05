@@ -13,8 +13,8 @@ struct InfoView: View {
     @StateObject private var viewModel: ViewModel
     @State private var colors: UIImageColors?
 
-    init(pokemon: PokemonListItem) {
-        _viewModel = .init(wrappedValue: .init(pokemon: pokemon))
+    init(_ viewModel: ViewModel) {
+        _viewModel = .init(wrappedValue: viewModel)
     }
 
     var body: some View {
