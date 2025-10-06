@@ -20,7 +20,7 @@ struct InfoView: View {
     var body: some View {
         Group {
             if viewModel.isLoading {
-                ProgressView("Loading...")
+                ProgressView("loading")
             } else if let pokemon = viewModel.pokemon {
                 ZStack(alignment: .top) {
                     backgroundColorView
@@ -56,15 +56,21 @@ struct InfoView: View {
                     .padding()
                 }
             } else if let error = viewModel.errorMessage {
-                Text("An error occured: \(error)")
+                Text(error)
                     .foregroundStyle(.red)
 
-                Button("Reload") {
+                Button {
                     Task { await viewModel.fetchDetails() }
+                } label: {
+                    Text("Reload")
                 }
                 .buttonStyle(.borderedProminent)
             } else {
-                EmptyView()
+                ContentUnavailableView(
+                    "content_unavailable",
+                    systemImage: "questionmark.square.dashed",
+                    description: Text("choose_another_pokemon")
+                )
             }
         }
         .navigationTitle(viewModel.title)

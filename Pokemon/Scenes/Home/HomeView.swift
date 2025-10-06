@@ -25,7 +25,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 if viewModel.isLoading && viewModel.pokemons.isEmpty {
-                    ProgressView("Loading...")
+                    ProgressView("loading")
                 } else if viewModel.errorMessage != nil && viewModel.pokemons.isEmpty {
                     Text(viewModel.errorMessage!)
                         .foregroundStyle(.red)
@@ -40,14 +40,14 @@ struct HomeView: View {
                     .padding()
                 }
             }
-            .navigationTitle("Pokemons")
+            .navigationTitle("pokemons_title")
             .navigationDestination(for: PokemonListItem.self) { pokemon in
                 InfoView(.init(
                     pokemon: pokemon,
                     service: DefaultPokemonInfoService(repository: repository)
                 ))
             }
-            .searchable(text: $viewModel.searchText, prompt: "Search name or number")
+            .searchable(text: $viewModel.searchText, prompt: Text("search"))
             .task { await viewModel.loadPokemons() }
         }
     }

@@ -30,7 +30,8 @@ struct ContentView: View {
 
     init() {
         let networkService = URLSessionNetworkService(
-            baseURLString: "https://pokeapi.co/api/v2"
+            baseURLString: "https://pokeapi.co",
+            version: .init(value: "v2")
         )
         let localRepository = LocalPokemonRepository()
         let remoteRepository = RemotePokemonRepository(network: networkService)

@@ -1,0 +1,103 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "#%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "%.1f kg (%.1f lbs)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$.1f kg (%2$.1f lbs)"
+          }
+        }
+      }
+    },
+    "%.2f m (%@ ft)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$.2f m (%2$@ ft)"
+          }
+        }
+      }
+    },
+    "%@" : {
+
+    },
+    "%lld" : {
+
+    },
+    "choose_another_pokemon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please choose another Pokemon"
+          }
+        }
+      }
+    },
+    "content_unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No details found"
+          }
+        }
+      }
+    },
+    "Height" : {
+
+    },
+    "loading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading..."
+          }
+        }
+      }
+    },
+    "pokemons_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokemons"
+          }
+        }
+      }
+    },
+    "Reload" : {
+
+    },
+    "search" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search name or number"
+          }
+        }
+      }
+    },
+    "Weight" : {
+
+    }
+  },
+  "version" : "1.0"
+}

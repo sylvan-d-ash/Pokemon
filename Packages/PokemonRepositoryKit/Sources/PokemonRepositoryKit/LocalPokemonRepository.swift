@@ -12,7 +12,6 @@ public final class LocalPokemonRepository: PokemonRepository {
 
     public func fetchAllPokemons() async throws -> [PokemonListItem] {
         guard let url = bundle.url(forResource: fileName, withExtension: "json") else {
-            print("File not found in bundle")
             throw NSError(
                 domain: "LocalPokemonRepository", code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "JSON file not found"])

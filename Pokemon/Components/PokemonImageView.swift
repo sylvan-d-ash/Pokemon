@@ -36,7 +36,11 @@ struct PokemonImageView: View {
                     .frame(height: height)
                     .frame(maxWidth: .infinity)
             @unknown default:
-                EmptyView()
+                Image(systemName: "questionmark.square.dashed")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: height)
+                    .frame(maxWidth: .infinity)
             }
         }
     }

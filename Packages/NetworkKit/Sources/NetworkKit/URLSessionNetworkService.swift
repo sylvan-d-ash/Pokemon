@@ -1,17 +1,26 @@
 import Foundation
 
+public struct APIVersion {
+    let value: String
+
+    public init(value: String) {
+        self.value = value
+    }
+}
+
 /// URLSession-based implementation of NetworkService
 public final class URLSessionNetworkService: NetworkService {
-    private let baseURLString: String
+    private let baseURL: URL?
     private let session: URLSession
     private let decoder: JSONDecoder
 
     public init(
         baseURLString: String,
+        version: APIVersion = .init(value: "v2"),
         session: URLSession = .shared,
         decoder: JSONDecoder = JSONDecoder()
     ) {
-        self.baseURLString = baseURLString
+        self.baseURL = URL(string: "\(baseURLString)/api/\(version.value)")
         self.session = session
         self.decoder = decoder
     }
@@ -40,7 +49,7 @@ public final class URLSessionNetworkService: NetworkService {
     }
 
     private func buildRequest(from endpoint: Endpoint) throws -> URLRequest {
-        guard var url = URL(string: baseURLString) else {
+        guard var url = baseURL else {
             throw NetworkError.invalidURL
         }
         url = url.appending(path: endpoint.path)
