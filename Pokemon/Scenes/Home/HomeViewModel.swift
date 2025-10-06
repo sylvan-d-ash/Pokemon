@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PokemonModels
 
 extension HomeView {
     @MainActor
@@ -14,7 +15,7 @@ extension HomeView {
         @Published private(set) var errorMessage: String?
         @Published var searchText: String = ""
 
-        private let service: PokemonRepository
+        private let service: PokemonListService
         private var allPokemons: [PokemonListItem] = []
 
         var pokemons: [PokemonListItem] {
@@ -27,16 +28,16 @@ extension HomeView {
             }
         }
 
-        init(service: PokemonRepository = DefaultPokemonRepository()) {
+        init(service: PokemonListService) {
             self.service = service
         }
 
-        func loadPokemons() {
+        func loadPokemons() async {
             guard !isLoading else { return }
             isLoading = true
             errorMessage = nil
 
-            let result = service.loadPokemonData()
+            let result = await service.fetchPokemons()
             switch result {
             case .success(let pokemons):
                 allPokemons = pokemons

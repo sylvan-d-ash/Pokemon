@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIImageColors
+import PokemonModels
 
 extension HomeView {
     struct PokemonCardView: View {
@@ -16,7 +17,7 @@ extension HomeView {
         var body: some View {
             ZStack {
                 (colors?.backgroundColor ?? .gray)
-                    .opacity(0.2)
+                    .opacity(0.3)
 
                 VStack {
                     PokemonImageView(url: pokemon.imageUrl, colors: $colors)

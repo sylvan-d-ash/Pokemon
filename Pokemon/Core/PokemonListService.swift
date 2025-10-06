@@ -6,50 +6,25 @@
 //
 
 import Foundation
-
-enum PokemonListEndpoint: APIEndpoint {
-    case list(count: Int, offset: Int)
-
-    var path: String { "/pokemon" }
-
-    var parameters: [String : Any]? {
-        switch self {
-        case .list(let count, let offset):
-            return ["limit": count, "offset": offset]
-        }
-    }
-}
+import PokemonRepositoryKit
+import PokemonModels
 
 protocol PokemonListService {
-    func fetchPokemons(reset: Bool) async -> Result<[PokemonListItem], Error>
+    func fetchPokemons() async -> Result<[PokemonListItem], Error>
 }
 
 final class DefaultPokemonListService: PokemonListService {
-    private let networkService: NetworkService
-    private var count = 0
-    private var offset = 0
-    private let limit = 10
+    private let repository: PokemonRepository
 
-    init(networkService: NetworkService = URLSessionNetworkService()) {
-        self.networkService = networkService
+    init(repository: PokemonRepository) {
+        self.repository = repository
     }
 
-    func fetchPokemons(reset: Bool = false) async -> Result<[PokemonListItem], Error> {
-        if reset {
-            offset = 0
-        }
-
-        let endpoint = PokemonListEndpoint.list(count: limit, offset: offset)
-        let results = await networkService.fetch(PokemonListResponse.self, endpoint: endpoint)
-
-        switch results {
-        case .success(let success):
-            count = success.count
-            if count > offset {
-                offset += limit
-            }
-            return .success(success.results)
-        case .failure(let error):
+    func fetchPokemons() async -> Result<[PokemonListItem], Error> {
+        do {
+            let pokemonList = try await repository.fetchAllPokemons()
+            return .success(pokemonList)
+        } catch {
             return .failure(error)
         }
     }

@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
+import PokemonModels
 
 struct HomeView: View {
     @StateObject private var viewModel: ViewModel
+    @Environment(\.pokemonRepository) private var repository
 
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
     ]
 
-    init() {
-        _viewModel = .init(wrappedValue: .init())
+    init(_ viewModel: ViewModel) {
+        _viewModel = .init(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -40,19 +42,13 @@ struct HomeView: View {
             }
             .navigationTitle("Pokemons")
             .navigationDestination(for: PokemonListItem.self) { pokemon in
-                InfoView(pokemon: pokemon)
+                InfoView(.init(
+                    pokemon: pokemon,
+                    service: DefaultPokemonInfoService(repository: repository)
+                ))
             }
             .searchable(text: $viewModel.searchText, prompt: "Search name or number")
-            .onAppear { viewModel.loadPokemons() }
+            .task { await viewModel.loadPokemons() }
         }
     }
-}
-
-#Preview("Dark") {
-    HomeView()
-        .preferredColorScheme(.dark)
-}
-
-#Preview("Light") {
-    HomeView()
 }

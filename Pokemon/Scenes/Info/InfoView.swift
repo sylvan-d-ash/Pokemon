@@ -7,13 +7,14 @@
 
 import SwiftUI
 import UIImageColors
+import PokemonModels
 
 struct InfoView: View {
     @StateObject private var viewModel: ViewModel
     @State private var colors: UIImageColors?
 
-    init(pokemon: PokemonListItem) {
-        _viewModel = .init(wrappedValue: .init(pokemon: pokemon))
+    init(_ viewModel: ViewModel) {
+        _viewModel = .init(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -98,7 +99,7 @@ struct InfoView: View {
                     .foregroundStyle(.white)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 10)
-                    .background(type.color.opacity(0.2))
+                    .background(type.color.opacity(0.3))
                     .clipShape(.capsule)
             }
         }

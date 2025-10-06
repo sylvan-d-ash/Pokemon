@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PokemonModels
 
 extension InfoView {
     @MainActor
@@ -19,7 +20,7 @@ extension InfoView {
         private let item: PokemonListItem
         private let service: PokemonInfoService
 
-        init(pokemon: PokemonListItem, service: PokemonInfoService = DefaultPokemonInfoService()) {
+        init(pokemon: PokemonListItem, service: PokemonInfoService) {
             self.item = pokemon
             self.service = service
         }
@@ -29,7 +30,7 @@ extension InfoView {
             isLoading = true
             errorMessage = nil
 
-            let result = await service.fetchPokemonInfo(id: "\(item.id)")
+            let result = await service.fetchPokemonInfo(id: item.id)
             switch result {
             case .success(let pokemon):
                 self.pokemon = pokemon
